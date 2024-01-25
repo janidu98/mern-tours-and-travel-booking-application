@@ -7,6 +7,12 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 const app = express();
 
+mongoose.connect(process.env.MONGO).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((error) => {
+    console.log(error);
+})
+
 //middleware
 app.use(express.json());
 app.use(cors());
