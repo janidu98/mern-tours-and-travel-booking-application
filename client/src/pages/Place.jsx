@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { CssBaseline, Grid } from "@mui/material";
+import { CssBaseline, Grid, ThemeProvider } from "@mui/material";
 
 import { getPlacesData, getWeatherData } from "../api";
 import Nav from "../components/Nav/Nav";
 import List from "../components/List/List";
 import Map from "../components/Map/Map";
+
 
 const Place = () => {
   const [type, setType] = useState("restaurants");
@@ -64,7 +65,7 @@ const Place = () => {
   return (
     <>
       <CssBaseline />
-      <Nav onPlaceChanged={onPlaceChanged} onLoad={onLoad} />
+        <Nav onPlaceChanged={onPlaceChanged} onLoad={onLoad} />
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
           <List
