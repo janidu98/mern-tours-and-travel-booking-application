@@ -1,12 +1,16 @@
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import './search-bar.css';
 import { Col, Form, FormGroup } from 'reactstrap';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
 
     const locationRef = useRef('');
     const distanceRef = useRef(0);
     const maxGroupSizeRef = useRef(0);
+    const [data, setData] = useState([]);
+    const navigate = useNavigate();
 
     const searchHandler = () => {
         const location = locationRef.current.value;
@@ -16,6 +20,18 @@ const SearchBar = () => {
         if(location === '' || distance === '' || maxGroupSize === '') {
             alert('All fields are required!');
         }
+
+        axios(`http://localhost:3000/api/tour/search/getTourBySearch?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`)
+        .then((result) => {
+          setData(result.data);
+          navigate(`/tour/search?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`, {state: result.data})
+          console.log(result.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+        
     }
 
   return (
