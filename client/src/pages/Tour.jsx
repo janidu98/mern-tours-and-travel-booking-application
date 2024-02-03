@@ -6,16 +6,43 @@ import TourCard from './../shared/TourCard'
 import SearchBar from './../shared/SearchBar'
 import Newsletter from './../shared/Newsletter'
 import { Col, Container, Row } from 'reactstrap'
+import axios from 'axios'
 
 const Tour = () => {
 
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
+  const [tours, setTours] = useState([]);
+  const [tourCount, setTourCount] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+
 
   useEffect(() => {
-    const pages = Math.ceil(5 / 4);
+
+    axios.get(`http://localhost:3000/api/tour/get?page=${page}`)
+    .then((result) => {
+      setTours(result.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  
+    axios.get('http://localhost:3000/api/tour/search/getTourCount')
+    .then((result) => {
+      setTourCount(result.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+
+
+    const pages = Math.ceil(tourCount / 8);
     setPageCount(pages);
-  }, [page]);
+
+    //window.scrollTo(0,0);
+  }, [page, tourCount, tours]);
 
   return (
     <>
@@ -30,11 +57,16 @@ const Tour = () => {
       </section>
 
       <section className='pt-0'>
-      <Container>
-          <Row>
+        <Container>
+
+          {loading && <h4>Loading...</h4>}
+          {error && error}
+
+          {!loading && !error && 
+            <Row>
             {
-              tourData?.map((tour) => (
-                <Col lg="3" className='mb-4' key={tour.id}>
+              tours?.map((tour) => (
+                <Col lg="3" className='mb-4' key={tour._id}>
                   <TourCard tour={tour}/>
                 </Col>
               ))
@@ -49,6 +81,7 @@ const Tour = () => {
               </div>
             </Col>
           </Row>
+          }
         </Container>
       </section>
 
