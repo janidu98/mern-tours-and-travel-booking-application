@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../styles/tour-details.css'
 import {Container, Row, Col, Form, ListGroup} from 'reactstrap'
 import {useParams} from 'react-router-dom'
@@ -7,6 +7,7 @@ import calculateAvgRating from '../utils/avgRating'
 import avatar from '../assets/images/avatar.jpg'
 import Booking from '../components/Booking/Booking'
 import Newsletter from '../shared/Newsletter'
+import axios from 'axios'
 
 const TourDetails = () => {
 
@@ -14,8 +15,20 @@ const TourDetails = () => {
 
   const reviewMsgRef = useRef('');
   const [tourRating, setTourRating] = useState(null);
+  const [tour, setTour] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const tour = tourData.find(tour => tour.id === id);
+  axios.get(`http://localhost:3000/api/tour/get/${id}`)
+  .then((result) => {
+    setTour(result.data);
+    setLoading(false);
+  })
+  .catch((error) => {
+    setError(error.message);
+    setLoading(false);
+    console.log(error);
+  })
 
   const {photo, title, desc, price, address, reviews, city, distance, maxGroupSize} = tour;
 
@@ -31,11 +44,19 @@ const TourDetails = () => {
     //alert(`${reviewText}, ${tourRating}`);
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setLoading(true);
+  },[])
+
   return (
     <>
       <section>
         <Container>
-          <Row>
+          {loading && <h4>Loading...</h4>}
+          {error && error}
+          {!loading && !error && 
+            <Row>
             <Col lg="8">
               <div className="tour__content">
                 <img src={photo} alt="" />
@@ -133,6 +154,7 @@ const TourDetails = () => {
               <Booking tour={tour} avgRating={avgRating}/>
             </Col>
           </Row>
+          }
         </Container>
       </section>
       <Newsletter />
