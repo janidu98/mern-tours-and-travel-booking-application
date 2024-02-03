@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import tourRoute from './routes/tourRoute.js';
+import userRoute from './routes/userRoute.js';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 //call routes
 app.use('/api/tour', tourRoute);
+app.use('/api/user', userRoute);
 
 //middleware
 app.use((err, req, res, next) => {
