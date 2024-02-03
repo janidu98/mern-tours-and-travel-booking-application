@@ -63,9 +63,31 @@ export const getTour = async (req, res, next) => {
 
 //get all tour
 export const getAllTour = async (req, res, next) => {
+
+    //for pagination
+    const page = parseInt(req.query.page);
+
     try {
-        const tours = await Tour.find({});
+        const tours = await Tour.find({}).skip(page * 8).limit(8);
         return res.status(200).json(tours);
+    } catch (error) {
+        next(error);
+    }
+}
+
+//get tour by search
+export const getTourBySearch = async (req, res, next) => {
+
+    //here 'i' means case sensitive
+    const city = new RegExp(req.query.city, 'i');
+    const distance = parseInt(req.query.distance);
+    const maxGroupSize = parseInt(req.query.maxGroupSize);
+
+    try {
+        const tours = await Tour.find({ city, distance: {$gte:distance}, maxGroupSize:{$gte:maxGroupSize}});
+        
+        return res.status(200).json(tours);
+
     } catch (error) {
         next(error);
     }
