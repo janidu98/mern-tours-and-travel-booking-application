@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import tourRoute from './routes/tourRoute.js';
 import userRoute from './routes/userRoute.js';
 import authRoute from './routes/authRoute.js';
+import reviewsRoute from './routes/reviewsRoute.js';
 
 dotenv.config();
 
@@ -16,10 +17,14 @@ mongoose.connect(process.env.MONGO).then(() => {
 })
 
 const app = express();
+const corsOptions = {
+    origin: true,
+    credentials: true
+}
 
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 
@@ -27,6 +32,7 @@ app.use(cookieParser());
 app.use('/api/tour', tourRoute);
 app.use('/api/user', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/review', reviewsRoute);
 
 //middleware
 app.use((err, req, res, next) => {

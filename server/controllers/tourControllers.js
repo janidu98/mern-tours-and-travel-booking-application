@@ -48,7 +48,7 @@ export const deleteTour = async (req, res, next) => {
 
 //get single tour
 export const getTour = async (req, res, next) => {
-    const tour = await Tour.findById(req.params.id);
+    const tour = await Tour.findById(req.params.id).populate("reviews");
     if(!tour){
         return next(errorHandler(404, 'Tour is not found'));
     }
@@ -68,7 +68,7 @@ export const getAllTour = async (req, res, next) => {
     const page = parseInt(req.query.page);
 
     try {
-        const tours = await Tour.find({}).skip(page * 8).limit(8);
+        const tours = await Tour.find({}).populate("reviews").skip(page * 8).limit(8);
         return res.status(200).json(tours);
     } catch (error) {
         next(error);
@@ -84,7 +84,7 @@ export const getTourBySearch = async (req, res, next) => {
     const maxGroupSize = parseInt(req.query.maxGroupSize);
 
     try {
-        const tours = await Tour.find({ city, distance: {$gte:distance}, maxGroupSize:{$gte:maxGroupSize}});
+        const tours = await Tour.find({ city, distance: {$gte:distance}, maxGroupSize:{$gte:maxGroupSize}}).populate("reviews");
         
         return res.status(200).json(tours);
 
@@ -100,7 +100,7 @@ export const getFeaturedTour = async (req, res, next) => {
     const page = parseInt(req.query.page);
 
     try {
-        const tours = await Tour.find({featured:true}).limit(8);
+        const tours = await Tour.find({featured:true}).populate("reviews").limit(8);
         return res.status(200).json(tours);
     } catch (error) {
         next(error);
