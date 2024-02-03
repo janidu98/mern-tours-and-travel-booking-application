@@ -92,3 +92,17 @@ export const getTourBySearch = async (req, res, next) => {
         next(error);
     }
 }
+
+//get featured tour
+export const getFeaturedTour = async (req, res, next) => {
+
+    //for pagination
+    const page = parseInt(req.query.page);
+
+    try {
+        const tours = await Tour.find({featured:true}).limit(8);
+        return res.status(200).json(tours);
+    } catch (error) {
+        next(error);
+    }
+}
