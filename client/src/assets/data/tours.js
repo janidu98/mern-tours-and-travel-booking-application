@@ -51,10 +51,10 @@ const tours = [
     title: "Gangarama Buddist Temple",
     city: "Colombo",
     address: "Colombo",
-    distance: 500,
+    distance: 6,
     price: 99,
     maxGroupSize: 8,
-    desc: "As suggested by the world-famous CNN Travel, Colombo is among one of the best places to visit in Sri Lanka in 2022. Although Sri Lanka’s dynamic capital is often overlooked by other major touristic cities, there are several wonderful places to visit in Colombo. It is a historical place with great multicultural landmarks including the Gangaramaya Buddhist Temple, the photogenic Red Mosque, and the ancient Hindu Temple.",
+    desc: "As suggested by the world-famous CNN Travel, Colombo is among one of the best places to visit in Sri Lanka in 2022. Although Sri Lanka's dynamic capital is often overlooked by other major touristic cities, there are several wonderful places to visit in Colombo. It is a historical place with great multicultural landmarks including the Gangaramaya Buddhist Temple, the photogenic Red Mosque, and the ancient Hindu Temple.",
     reviews: [
       {
         name: "jhon doe",
@@ -92,7 +92,7 @@ const tours = [
     distance: 500,
     price: 99,
     maxGroupSize: 8,
-    desc: "Often referred to as ‘Little England’, this genteel highland community does have a rose-tinted, vaguely British-country-village feel to it, with its colonial-era bungalows, Tudor-style hotels, well-tended hedgerows and pretty gardens. Indeed, Nuwara Eliya was once was the favored cool-climate escape for the hard-working and hard-drinking English and Scottish pioneers of Sri Lanka’s tea industry.",
+    desc: "Often referred to as 'Little England', this genteel highland community does have a rose-tinted, vaguely British-country-village feel to it, with its colonial-era bungalows, Tudor-style hotels, well-tended hedgerows and pretty gardens. Indeed, Nuwara Eliya was once was the favored cool-climate escape for the hard-working and hard-drinking English and Scottish pioneers of Sri Lanka's tea industry.",
     reviews: [
       {
         name: "jhon doe",
