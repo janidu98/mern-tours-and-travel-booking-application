@@ -106,3 +106,14 @@ export const getFeaturedTour = async (req, res, next) => {
         next(error);
     }
 }
+
+//get tour counts
+export const getTourCount = async (req, res, next) => {
+    try {
+        const tourCount = await Tour.estimatedDocumentCount();
+        res.status(200).json(tourCount);
+
+    } catch (error) {
+        next(error);
+    }
+}
