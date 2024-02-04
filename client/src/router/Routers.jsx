@@ -8,7 +8,6 @@ import Tour from '../pages/Tour';
 import TourDetails from '../pages/TourDetails';
 import About from '../pages/About';
 import ThankYou from '../pages/ThankYou';
-import Place from '../pages/Place';
 
 const Routers = () => {
   return (
@@ -17,7 +16,6 @@ const Routers = () => {
       <Route path='/home' element={<Home />}/>
       <Route path='/about' element={<About />}/>
       <Route path='/login' element={<Login />}/>
-      <Route path='/place' element={<Place />}/>
       <Route path='/register' element={<Register />}/>
       <Route path='/tour' element={<Tour />}/>
       <Route path='/tour/search' element={<SearchResultList />}/>
