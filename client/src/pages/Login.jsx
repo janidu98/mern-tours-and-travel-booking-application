@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import '../styles/login.css'
 
 import {Container , Row, Col, Form, FormGroup, Button} from 'reactstrap'
@@ -7,7 +7,14 @@ import {Link} from 'react-router-dom'
 import loginImg from '../assets/images/login.png'
 import userIcon from '../assets/images/user.png'
 
+import {AuthContext} from '../context/AuthContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+
 const Login = () => {
+
+  const {dispatch} = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
     email: undefined,
@@ -18,8 +25,33 @@ const Login = () => {
       setCredentials(prev => ({...prev, [e.target.id]: e.target.value}))
   }
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
+    //navigate('/home');
+    dispatch({type: 'LOGIN_START'});
+    
+      axios.post('http://localhost:3000/api/auth/login', JSON.stringify(credentials), {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        
+      })
+      .then((result) => {
+        console.log(result.data);
+  
+        dispatch({type: 'LOGIN_SUCCESS', payload: result.data});
+        navigate('/home');
+      })
+      .catch((error) => {
+
+        dispatch({type: 'LOGIN_FAILURE', payload: error.message});
+      })
+      //alert('after');
+      
+
+    
+    
   }
 
   return (

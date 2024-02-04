@@ -40,3 +40,16 @@
     text-align: center;
     margin-top: 20px;
 }
+
+
+
+
+/* responsive */
+
+@media only screen and (max-width: 992px) {
+
+    .footer .logo img{
+        width: 20%;
+        margin-bottom: 1rem;
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../styles/tour-details.css'
 import {Container, Row, Col, Form, ListGroup} from 'reactstrap'
 import {useParams} from 'react-router-dom'
@@ -8,6 +8,7 @@ import avatar from '../assets/images/avatar.jpg'
 import Booking from '../components/Booking/Booking'
 import Newsletter from '../shared/Newsletter'
 import axios from 'axios'
+import { AuthContext } from '../context/AuthContext'
 
 const TourDetails = () => {
 
@@ -19,18 +20,24 @@ const TourDetails = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  axios.get(`http://localhost:3000/api/tour/get/${id}`)
-  .then((result) => {
-    setTour(result.data);
-    setLoading(false);
-  })
-  .catch((error) => {
-    setError(error.message);
-    setLoading(false);
-    console.log(error);
-  })
+  const {user} = useContext(AuthContext);
+
+  useEffect(() => {
+    axios.get(`http://localhost:3000/api/tour/get/${id}`)
+    .then((result) => {
+      setTour(result.data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      setError(error.message);
+      setLoading(false);
+      console.log(error);
+    })
+  }, []);
 
   const {photo, title, desc, price, address, reviews, city, distance, maxGroupSize} = tour;
+
+  // const [addReviews, setAddReviews] = useState(reviews);
 
   const {totalRating, avgRating} = calculateAvgRating(reviews);
 
@@ -41,7 +48,33 @@ const TourDetails = () => {
     e.preventDefault();
 
     const reviewText = reviewMsgRef.current.value;
-    //alert(`${reviewText}, ${tourRating}`);
+    
+    if(!user || user === undefined || user === null){
+      alert('Please sign in');
+    }
+
+    const reviewObj = {
+      username: user.data.username,
+      reviewText,
+      rating: tourRating
+    }
+    console.log(reviewObj);
+    axios.post(`http://localhost:3000/api/review/create-review/${id}`, JSON.stringify(reviewObj), {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+    .then((result) => {
+      alert('Review submitted')
+      //console.log(result.data);
+      //setAddReviews()
+      setLoading(false);
+    })
+    .catch((error) => {
+      alert(error.message)
+      setLoading(false);
+    })
   }
 
   useEffect(() => {
@@ -124,23 +157,23 @@ const TourDetails = () => {
                   <ListGroup className='user__reviews'>
                   {
                     reviews?.map(review => (
-                      <div className="review__item">
+                      <div className="review__item" key={review._id}>
                         <img src={avatar} alt="" />
 
                         <div className="w-100">
                           <div className="d-flex align-items-center justify-content-between">
                             <div>
-                              <h5>John</h5>
+                              <h5>{review.username}</h5>
                               <p>
-                                {new Date("01-24-2024").toLocaleDateString("en-US", options)}
+                                {new Date(review.createdAt).toLocaleDateString("en-US", options)}
                               </p>
                             </div>
                             <span className="d-flex align-items-center">
-                              5<i class="ri-star-s-fill"></i>
+                              {review.rating}<i class="ri-star-s-fill"></i>
                             </span>
                           </div>
 
-                          <h6>Amazing tour</h6>
+                          <h6>{review.reviewText}</h6>
                         </div>
                       </div>
                     ))

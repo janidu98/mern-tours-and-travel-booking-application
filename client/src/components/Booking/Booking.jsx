@@ -1,33 +1,57 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './booking.css'
 import { Button, Form, FormGroup, ListGroup, ListGroupItem } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext.jsx'
+import axios from 'axios'
 
 const Booking = ({tour, avgRating}) => {
 
-    const {price, reviews} = tour;
+    const {price, reviews, title} = tour;
     const navigate = useNavigate();
 
-    const [credentials, setCredentials] = useState({
-        userId: '01',
-        userEmail: 'abc@gmail.com',
+    const {user} = useContext(AuthContext);
+
+    const [booking, setBooking] = useState({
+        userId: user.data && user.data._id,
+        userEmail: user.data && user.data.email,
+        tourName: title,
         fullName: '',
         phone: '',
         guestSize: 1,
-        bookAt: ''
+        bookAt: '',
     })
 
     const handleChange = (e) => {
-        setCredentials(prev => ({...prev, [e.target.id]: e.target.value}))
+      setBooking(prev => ({...prev, [e.target.id]: e.target.value}))
     }
 
     const serviceFee = 10;
-    const totalAmount = Number(price) * Number(credentials.guestSize) + Number(serviceFee)
+    const totalAmount = Number(price) * Number(booking.guestSize) + Number(serviceFee)
 
     const handleClick = (e) => {
         e.preventDefault();
+
+        console.log(booking);
+
+        if(!user || user === undefined || user === null){
+          alert('Please sign in');
+        }
+    
+        axios.post(`http://localhost:3000/api/booking/create-booking`, JSON.stringify(booking), {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+        })
+        .then((result) => {
+          navigate('/thank-you');
+        })
+        .catch((error) => {
+          alert(error.message)
+        })
         
-        navigate('/thank-you');
+        
     }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import '../styles/login.css'
 
 import {Container , Row, Col, Form, FormGroup, Button} from 'reactstrap'
@@ -7,7 +7,14 @@ import {Link} from 'react-router-dom'
 import registerImg from '../assets/images/register.png'
 import userIcon from '../assets/images/user.png'
 
+import {AuthContext} from '../context/AuthContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+
 const Register = () => {
+
+  const {dispatch} = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
     userName: undefined,
@@ -19,8 +26,21 @@ const Register = () => {
       setCredentials(prev => ({...prev, [e.target.id]: e.target.value}))
   }
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
+
+      axios.post('http://localhost:3000/api/auth/register', JSON.stringify(credentials), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((result) => {
+          dispatch({type: 'REGISTER_SUCCESS'});
+          navigate('/login');
+      })
+      .catch((error) => {
+        alert(error.message);
+      })
+
   }
 
   return (
