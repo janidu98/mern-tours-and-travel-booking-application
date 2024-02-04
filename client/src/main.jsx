@@ -7,7 +7,6 @@ import "remixicon/fonts/remixicon.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter } from 'react-router-dom'
-import { ThemeProvider } from '@mui/material';
 import { AuthContextProvider } from './context/AuthContext.jsx';
 
 
